@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+<h1>Modules pages</h1>
+
+
+    
+{% for module in modules %}
+    Module Name: {{module.module_name}}
+    Module code: {{module.code}}
+    Credit: {{module.credit}}
+    Module Description:  {{module.module_desc}}
+    Module Name: {{module.category}}
+
+    Status:
+    {% if  module.availability %}
+        Open
+    {% else %}
+        Closed
+        {% endif %}
+    <hr>
+{% endfor %}
+    
+
