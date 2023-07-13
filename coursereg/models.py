@@ -17,7 +17,9 @@ class Module(models.Model):
     def __str__(self):
         return self.module_name
     
-
+    @property
+    def registrations(self):
+        return [registration.student for registration in Registration.objects.filter(module_registered=self)]
 
 class Registration(models.Model):
     module_registered = models.ForeignKey(Module, on_delete=models.CASCADE)
