@@ -1,8 +1,12 @@
+{% extends 'coursereg/base.html'%} {% block content%}
+{%load static %}
 <h1>Registration page</h1>
+{% load crispy_forms_tags %}
 
 <form method="post">
     {% csrf_token %}
-    {{form.as_p}}
+    {{form|crispy}}
 
     <button type="submit">Register</button>
 </form>
+ {% endblock %}

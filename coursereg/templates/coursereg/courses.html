@@ -1,0 +1,11 @@
+{% extends 'coursereg/base.html' %}
+{%load static %}
+{% block content%}
+    <h1>Courses</h1>  
+    {% for course in courses %}
+      course Name: {{course.name}}
+      <hr>
+    {% endfor %}
+{% endblock %}
+    
+

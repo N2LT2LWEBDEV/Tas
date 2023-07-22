@@ -1,3 +1,5 @@
+{% extends 'coursereg/base.html'%}{% block content%} {%load static %}
+
 <h1>Module Details</h1>
 
 {% if module %}
@@ -25,3 +27,5 @@ Registered Students:
     {% endfor %}
     
 {% endif %}
+
+{% endblock %}
