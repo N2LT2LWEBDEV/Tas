@@ -1,1 +1,15 @@
-<h1>Profile page</h1>
+{% extends 'coursereg/base.html'%}{% block content%} {%load static %}
+<div class="col-md-6 offset-md-3">
+  <br />
+  <h1>Profile page</h1>
+
+  {% if student is not None %}
+    <p>Name: {{ student.user.first_name }} {{ student.user.last_name }}</p>
+    <p>Address: {{ student.address }}</p>
+    <p>City: {{ student.city }}</p>
+    <p>Country: {{ student.country }}</p>
+    <p>Date of birth: {{ student.date_of_birth }}</p>
+    <p>Course: {{ student.course.name }}</p>
+  {% endif %}
+</div>
+{%endblock%}

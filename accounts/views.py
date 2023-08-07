@@ -33,3 +33,11 @@ def register(request):
         form = UserRegisterForm()
         student_form = ProfileUpdateForm()
         return render(request, 'accounts/register.html', {'form': form, 'student_form': student_form})
+    
+def profile(request, pk):
+    if request.user.is_authenticated:
+        student = Student.objects.get(id=pk)
+        return render(request, 'accounts/profile.html', {'student': student})
+    else:
+        messages.warning(request, "You must be logged in to view this page")
+        return redirect('coursereg:home')
