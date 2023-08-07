@@ -5,6 +5,12 @@ from .models import Module
 def home(request):
     return render(request, "coursereg/home.html", {"title": "Home page"})
 
+def about(request):
+    return render(request, 'coursereg/about.html', {})
+
+def contact(request):
+    return render(request, 'coursereg/contact.html', {})
+
 def modules(request):
     return render(request, "coursereg/modules.html", {"title": "Modules page","modules":Module.objects.all()})
 
