@@ -1,12 +1,37 @@
 {% extends 'coursereg/base.html'%} {% block content%}
 {%load static %}
-<h1>Registration page</h1>
 {% load crispy_forms_tags %}
+<div class="col-md-6 offset-md-3">
+    <br />
+    <h1>Registration page</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% if form.errors %}
+        {% for field in form %}
+        {% if field.errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ field.errors }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
 
-<form method="post">
-    {% csrf_token %}
-    {{form|crispy}}
+        {% if student_form.errors %}
+        {% for field in student_form %}
+        {% if field.errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ field.errors }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
 
-    <button type="submit">Register</button>
-</form>
- {% endblock %}
+        {{form|crispy}}
+        {{student_form|crispy}}
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+{% endblock %}

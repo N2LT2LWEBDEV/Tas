@@ -1,22 +1,39 @@
 {% extends 'coursereg/base.html' %}
 {%load static %}
 {% block content%}
-    <h1>Modules page</h1>  
-    {% for module in modules %}
-        Module Name: {{module.module_name}}
-        Module code: {{module.code}}
-        Credit: {{module.credit}}
-        Module Description:  {{module.module_desc}}
-        Module Name: {{module.category}}
+<div class="col-md-8 offset-md-2">
+    <br />
+    <h1>Modules page</h1>
 
-        Status:
-        {% if  module.availability %}
-            Open
-        {% else %}
-            Closed
-            {% endif %}
-        <hr>
-    {% endfor %}
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Module Name</th>
+                <th scope="col">Module Code</th>
+                <th scope="col">Credit</th>
+                <th scope="col">Module Description</th>
+                <th scope="col">Module Category</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for module in modules %}
+            <tr>
+                <td scope="row">{{ module.module_name }}</td>
+                <td scope="row">{{ module.code }}</td>
+                <td scope="row">{{ module.credit }}</td>
+                <td scope="row">{{ module.module_desc }}</td>
+                <td scope="row">{{ module.category }}</td>
+                <td scope="row">
+                    {% if module.availability %}
+                    Open
+                    {% else %}
+                    Closed
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
-    
-
