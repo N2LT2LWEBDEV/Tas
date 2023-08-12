@@ -1,31 +1,55 @@
 {% extends 'coursereg/base.html'%}{% block content%} {%load static %}
+<div class="col-md-8 offset-md-2 pt-3">
+    <h1>Module Details</h1>
 
-<h1>Module Details</h1>
+    {% if module %}
+    <table class="table table-striped table-hover table-bordered">
+        <tbody>
+            <tr>
+                <td>Module Name</td>
+                <td>{{ module.module_name }}</td>
+            </tr>
+            <tr>
+                <td>Module Code</td>
+                <td>{{ module.code }}</td>
+            </tr>
+            <tr>
+                <td>Credit</td>
+                <td>{{ module.credit }}</td>
+            </tr>
+            <tr>
+                <td>Module Description</td>
+                <td>{{ module.module_desc }}</td>
+            </tr>
+            <tr>
+                <td>Category</td>
+                <td>{{ module.category }}</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>
+                    {% if module.availability %}
+                    Open
+                    {% else %}
+                    Closed
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-{% if module %}
-    Module Name: {{module.module_name}}
-    Module code: {{module.code}}
-    Credit: {{module.credit}}
-    Module Description:  {{module.module_desc}}
-    Module Name: {{module.category}}
+    <h2>Registered Students</h2>
 
-    Status:
-    {% if  module.availability %}
-        Open
-    {% else %}
-        Closed
-        {% endif %}
-    <hr>
-
-Registered Students: 
-
-
-    {% for student in registrations %}
-    <p>
-       <b> {{student.user.username}}</b> --   {{student.user.first_name}} {{student.user.last_name}} 
-    </p>    
-    {% endfor %}
-    
-{% endif %}
-
+    <ul class="list-group">
+        {% for student in registrations %}
+        <li class="list-group-item">
+            <div class="d-flex">
+                <img src="/media/{{student.profile_pic}}" class="profile-photo" alt="profile photo">
+                <p>{{ student.user.first_name }} {{ student.user.last_name }}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
 {% endblock %}

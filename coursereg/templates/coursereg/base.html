@@ -66,9 +66,10 @@
           <a href="{% url 'coursereg:home' %}" class="nav-item nav-link">Home</a>
           <a href="{% url 'coursereg:about' %}" class="nav-item nav-link">About</a>
           <a href="{% url 'coursereg:module' %}" class="nav-item nav-link">Modules</a>
+          <a href="{% url 'coursereg:courses' %}" class="nav-item nav-link">Courses</a>
           <a href="{% url 'coursereg:contact' %}" class="nav-item nav-link">Contact</a>
-          {% if user.is_authenticated %}
-            <a href="{% url 'accounts:profile' user.id %}" class="nav-item nav-link">Profile</a>
+          {% if user.is_authenticated and student is not None %}
+            <a href="{% url 'accounts:profile' student.id %}" class="nav-item nav-link">Profile</a>
           {% endif %}
         </div>
 

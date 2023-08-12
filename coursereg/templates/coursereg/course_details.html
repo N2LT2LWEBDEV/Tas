@@ -1,0 +1,16 @@
+{% extends 'coursereg/base.html'%}{% block content%} {%load static %}
+<div class="col-md-8 offset-md-2 pt-3">
+  {% if course %}
+  <h2>Course Name: {{ course.name }}</h2>
+
+  <h3>Modules</h3>
+  <ul class="list-group">
+    {% for module in modules %}
+    <li class="list-group-item">
+      <a href="{% url 'coursereg:module_details' module.code %}">{{ module.module_name }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endblock %}

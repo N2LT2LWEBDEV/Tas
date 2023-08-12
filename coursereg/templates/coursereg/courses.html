@@ -1,11 +1,14 @@
 {% extends 'coursereg/base.html' %}
 {%load static %}
 {% block content%}
-    <h1>Courses</h1>  
+<div class="col-md-8 offset-md-2">
+  <h1>Courses</h1>
+  <ul class="list-group">
     {% for course in courses %}
-      course Name: {{course.name}}
-      <hr>
+    <li class="list-group-item">
+      <a href="{% url 'coursereg:course_detail' course.id %}">{{ course.name }}</a>
+    </li>
     {% endfor %}
+  </ul>
+</div>
 {% endblock %}
-    
-

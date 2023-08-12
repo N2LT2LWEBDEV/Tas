@@ -46,24 +46,28 @@ def profile(request, pk):
         return redirect('coursereg:home')
     
 def update_profile(request, pk):
-    student = Student.objects.get(id = pk)
-    student_form = ProfileUpdateForm(request.POST or None, instance=student)
+    if request.user.is_authenticated:
+        student = Student.objects.get(id = pk)
+        student_form = ProfileUpdateForm(request.POST or None, instance=student)
 
-    if request.method == 'POST':
-        if student_form.is_valid():
-            student.address = student_form.cleaned_data['address']
-            student.city = student_form.cleaned_data['city']
-            student.country = student_form.cleaned_data['country']
-            student.date_of_birth = student_form.cleaned_data['date_of_birth']
+        if request.method == 'POST':
+            if student_form.is_valid():
+                student.address = student_form.cleaned_data['address']
+                student.city = student_form.cleaned_data['city']
+                student.country = student_form.cleaned_data['country']
+                student.date_of_birth = student_form.cleaned_data['date_of_birth']
 
-            if 'profile_pic' in request.FILES:
-                student.profile_pic = request.FILES['profile_pic']
-            
-            student.save()
-            messages.success(request, f'Your profile has been updated!')
-            return redirect('accounts:profile', pk=pk)
+                if 'profile_pic' in request.FILES:
+                    student.profile_pic = request.FILES['profile_pic']
+                
+                student.save()
+                messages.success(request, f'Your profile has been updated!')
+                return redirect('accounts:profile', pk=pk)
+            else:
+                messages.warning(request, f'Unable to update profile!')
+            return render(request, 'accounts/update_profile.html', {'student_form': student_form})
         else:
-            messages.warning(request, f'Unable to update profile!')
-        return render(request, 'accounts/update_profile.html', {'student_form': student_form})
+            return render(request, 'accounts/update_profile.html', { 'student_form': student_form })
     else:
-        return render(request, 'accounts/update_profile.html', { 'student_form': student_form })
+        messages.warning(request, "You must be logged in to view this page")
+        return redirect('coursereg:home')
