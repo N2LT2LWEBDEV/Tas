@@ -1,15 +1,23 @@
 {% extends 'coursereg/base.html'%}{% block content%} {%load static %}
-<div class="col-md-6 offset-md-3">
-  <br />
-  <h1>Profile page</h1>
+<div class="row pt-3">
+  <div class="col-md-8 offset-md-2">
+    <h1>Profile page</h1>
+    <div class="row">
+      <div class="col-md-3">
+        <img src="/media/{{student.profile_pic}}" class="avatar img-circle img-thumbnail" alt="profile photo">
+      </div>
 
-  {% if student is not None %}
-    <p>Name: {{ student.user.first_name }} {{ student.user.last_name }}</p>
-    <p>Address: {{ student.address }}</p>
-    <p>City: {{ student.city }}</p>
-    <p>Country: {{ student.country }}</p>
-    <p>Date of birth: {{ student.date_of_birth }}</p>
-    <p>Course: {{ student.course.name }}</p>
-  {% endif %}
+      <div class="col-md-6 offset-md-1">
+        {% if student is not None %}
+        <p>Name: {{ student.user.first_name }} {{ student.user.last_name }}</p>
+        <p>Address: {{ student.address }}</p>
+        <p>City: {{ student.city }}</p>
+        <p>Country: {{ student.country }}</p>
+        <p>Date of birth: {{ student.date_of_birth }}</p>
+        <p>Course: {{ student.course.name }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
 {%endblock%}

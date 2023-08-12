@@ -21,6 +21,9 @@ def register(request):
             existing_student_record.city = student_form.cleaned_data['city']
             existing_student_record.country = student_form.cleaned_data['country']
             existing_student_record.date_of_birth = student_form.cleaned_data['date_of_birth']
+
+            if 'profile_pic' in request.FILES:
+                existing_student_record.profile_pic = request.FILES['profile_pic']
             
             existing_student_record.save()
             messages.success(
