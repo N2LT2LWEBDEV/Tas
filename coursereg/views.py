@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from .models import Module
+from django.shortcuts import render, redirect
+from .models import Module, Registration
 from django.contrib.auth.models import Group
 from accounts.models import Student
+from django.contrib import messages
 
 
 def home(request):
@@ -53,9 +54,52 @@ def module_details(request, code):
     if request.user.is_authenticated:
         student = Student.objects.get(user=request.user)
     module = Module.objects.filter(code=code).first()
+    context = {}
     if module:
+        is_student_registered = False
+        student_module_registration = Registration.objects.filter(student=student, module_registered=module)
+        if len(student_module_registration) > 0:
+            is_student_registered = True
         context = {"title": module.module_name, "module": module, "courses": module.courses,
-                   "registrations": module.registrations, 'student': student}
+                   "registrations": module.registrations, 'student': student, 'is_student_registered': is_student_registered}
     else:
         context = {"title": "Module not found", 'student': student}
     return render(request, "coursereg/module_detail.html", context)
+
+def module_register(request, pk):
+    if request.user.is_authenticated:
+        student = Student.objects.get(user=request.user)
+        module = Module.objects.get(id=pk)
+        student_module_registration = Registration.objects.filter(student=student, module_registered=module)
+        if len(student_module_registration) > 0:
+            messages.error(
+                request, f'You have already registered with this module')
+            return redirect('coursereg:module_details', code=module.code)
+        else:
+            student_module_registration = Registration(module_registered=module, student=student)
+            student_module_registration.save()
+            messages.success(
+                request, f'You have successfully registered with this module')
+            return redirect('coursereg:module_details', code=module.code)
+    else:
+        messages.warning(request, "You must be logged in to register with a module")
+        return redirect('coursereg:home')
+    
+def module_unregister(request, pk):
+    if request.user.is_authenticated:
+        student = Student.objects.get(user=request.user)
+        module = Module.objects.get(id=pk)
+        student_module_registration = Registration.objects.filter(student=student, module_registered=module)
+        if len(student_module_registration) == 0:
+            messages.error(
+                request, f'You are not registered with this module')
+            return redirect('coursereg:module_details', code=module.code)
+        else:
+            student_module_registration[0].delete()
+            messages.success(
+                request, f'You have successfully unregistered with this module')
+            return redirect('coursereg:module_details', code=module.code)
+    else:
+        messages.warning(request, "You must be logged in to register with a module")
+        return redirect('coursereg:home')
+

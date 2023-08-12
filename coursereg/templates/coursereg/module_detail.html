@@ -1,5 +1,13 @@
 {% extends 'coursereg/base.html'%}{% block content%} {%load static %}
 <div class="col-md-8 offset-md-2 pt-3">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
     <h1>Module Details</h1>
 
     {% if module %}
@@ -38,7 +46,22 @@
         </tbody>
     </table>
 
-    <h2>Registered Students</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Registered Students</h2>
+        </div>
+        {% if user.is_authenticated %}
+            {% if is_student_registered == False  %}
+                <div class="col-md-6 text-end">
+                    <a href="{% url 'coursereg:module_register' module.id %}">Register</a>
+                </div>
+            {% else %}
+                <div class="col-md-6 text-end">
+                    <a href="{% url 'coursereg:module_unregister' module.id %}">Unregister</a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
 
     <ul class="list-group">
         {% for student in registrations %}
