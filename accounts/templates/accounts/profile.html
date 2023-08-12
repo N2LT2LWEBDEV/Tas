@@ -1,10 +1,19 @@
 {% extends 'coursereg/base.html'%}{% block content%} {%load static %}
 <div class="row pt-3">
   <div class="col-md-8 offset-md-2">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
     <h1>Profile page</h1>
     <div class="row">
       <div class="col-md-3">
         <img src="/media/{{student.profile_pic}}" class="avatar img-circle img-thumbnail" alt="profile photo">
+        <a href="{% url 'accounts:update_profile' student.id %}">Update profile</a>
       </div>
 
       <div class="col-md-6 offset-md-1">
