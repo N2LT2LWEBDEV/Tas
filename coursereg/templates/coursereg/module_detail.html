@@ -51,10 +51,12 @@
             <h2>Registered Students</h2>
         </div>
         {% if user.is_authenticated %}
-            {% if is_student_registered == False  %}
-                <div class="col-md-6 text-end">
-                    <a href="{% url 'coursereg:module_register' module.id %}">Register</a>
-                </div>
+            {% if not is_student_registered  %}
+                {% if module.availability  %}
+                    <div class="col-md-6 text-end">
+                        <a href="{% url 'coursereg:module_register' module.id %}">Register</a>
+                    </div>
+                {% endif %}
             {% else %}
                 <div class="col-md-6 text-end">
                     <a href="{% url 'coursereg:module_unregister' module.id %}">Unregister</a>

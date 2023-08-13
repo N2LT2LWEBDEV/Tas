@@ -97,7 +97,7 @@ def module_unregister(request, pk):
         else:
             student_module_registration[0].delete()
             messages.success(
-                request, f'You have successfully unregistered with this module')
+                request, f'You have successfully unregistered from this module')
             return redirect('coursereg:module_details', code=module.code)
     else:
         messages.warning(request, "You must be logged in to register with a module")
