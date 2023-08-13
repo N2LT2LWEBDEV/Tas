@@ -44,9 +44,11 @@ def course_details(request, pk):
     course = Group.objects.get(id=pk)
     course_modules = Module.objects.filter(courses=course)
     student = None
+    is_student_enrolled = False
     if request.user.is_authenticated:
         student = Student.objects.get(user=request.user)
-    return render(request, "coursereg/course_details.html", {"title": "Courses details page", "course": course, 'student': student, 'modules': course_modules})
+        is_student_enrolled = request.user.groups.filter(name=course.name).exists()
+    return render(request, "coursereg/course_details.html", {"title": "Courses details page", "course": course, 'student': student, 'modules': course_modules, 'is_student_enrolled': is_student_enrolled})
 
 
 def module_details(request, code):
@@ -73,13 +75,13 @@ def module_register(request, pk):
         student_module_registration = Registration.objects.filter(student=student, module_registered=module)
         if len(student_module_registration) > 0:
             messages.error(
-                request, f'You have already registered with this module')
+                request, 'You have already registered with this module')
             return redirect('coursereg:module_details', code=module.code)
         else:
             student_module_registration = Registration(module_registered=module, student=student)
             student_module_registration.save()
             messages.success(
-                request, f'You have successfully registered with this module')
+                request, 'You have successfully registered with this module')
             return redirect('coursereg:module_details', code=module.code)
     else:
         messages.warning(request, "You must be logged in to register with a module")
@@ -92,14 +94,51 @@ def module_unregister(request, pk):
         student_module_registration = Registration.objects.filter(student=student, module_registered=module)
         if len(student_module_registration) == 0:
             messages.error(
-                request, f'You are not registered with this module')
+                request, 'You are not registered with this module')
             return redirect('coursereg:module_details', code=module.code)
         else:
             student_module_registration[0].delete()
             messages.success(
-                request, f'You have successfully unregistered from this module')
+                request, 'You have successfully unregistered from this module')
             return redirect('coursereg:module_details', code=module.code)
     else:
         messages.warning(request, "You must be logged in to register with a module")
         return redirect('coursereg:home')
 
+def course_enrol(request, pk):
+    if request.user.is_authenticated:
+        user=request.user
+        course = Group.objects.get(id=pk)
+        user_groups = user.groups.all()
+        if len(user_groups) > 0:
+            if (user_groups[0].name == course.name):
+                messages.error(request, 'You are already enrolled in this course')
+            else:
+                messages.error(request, 'You are already enrolled in another course')
+            return redirect('coursereg:course_detail', pk=pk)
+        
+        else:
+            user.groups.add(course)
+            messages.success(
+                request, 'You have successfully enrolled in this module')
+            return redirect('coursereg:course_detail', pk=pk)
+    else:
+        messages.warning(request, "You must be logged in to enrol in a course")
+        return redirect('coursereg:home')
+    
+def course_unenrol(request, pk):
+    if request.user.is_authenticated:
+        user=request.user
+        course = Group.objects.get(id=pk)
+        is_enrolled = user.groups.filter(name=course.name).exists()
+        
+        if not is_enrolled:
+            messages.error(request, 'You are not enrolled in this course')
+        else:
+            user.groups.remove(course)
+            messages.success(request, 'You have successfully unenrolled from this course')
+        return redirect('coursereg:course_detail', pk=pk)
+
+    else:
+        messages.warning(request, "You must be logged in to enrol in a course")
+        return redirect('coursereg:home')

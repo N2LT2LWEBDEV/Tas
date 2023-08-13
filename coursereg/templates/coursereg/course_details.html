@@ -1,16 +1,43 @@
 {% extends 'coursereg/base.html'%}{% block content%} {%load static %}
-<div class="col-md-8 offset-md-2 pt-3">
-  {% if course %}
-  <h2>Course Name: {{ course.name }}</h2>
-
-  <h3>Modules</h3>
-  <ul class="list-group">
-    {% for module in modules %}
-    <li class="list-group-item">
-      <a href="{% url 'coursereg:module_details' module.code %}">{{ module.module_name }}</a>
-    </li>
+<div class="row">
+  <div class="col-md-8 offset-md-2 pt-3">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     {% endfor %}
-  </ul>
-  {% endif %}
+    {% endif %}
+    {% if course %}
+    <div class="row">
+      <div class="col-md-8">
+        <h2>Course Name: {{ course.name }}</h2>
+      </div>
+      {% if user.is_authenticated %}
+      <div class="col-md-4 text-end">
+        {% if not is_student_enrolled %}
+        <a href="{% url 'coursereg:course_enrol' course.id %}">Enrol</a>
+        {% else %}
+        <a href="{% url 'coursereg:course_unenrol' course.id %}">Unenrol</a>
+      </div>
+      {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <h3>Modules</h3>
+        <ul class="list-group">
+          {% for module in modules %}
+          <li class="list-group-item">
+            <a href="{% url 'coursereg:module_details' module.code %}">{{ module.module_name }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
