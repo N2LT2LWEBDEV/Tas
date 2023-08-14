@@ -13,7 +13,8 @@
     <div class="row">
       <div class="col-md-3">
         <img src="/media/{{student.profile_pic}}" alt="profile photo">
-        <a href="{% url 'accounts:update_profile' student.id %}">Update profile</a>
+        <p><a href="{% url 'accounts:update_profile' student.id %}">Update profile</a></p>
+        <p><a href="{% url 'coursereg:registrations' %}">My registrations</a></p>
       </div>
 
       <div class="col-md-6 offset-md-1">

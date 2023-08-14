@@ -1,0 +1,17 @@
+{% extends 'coursereg/base.html' %}
+{%load static %}
+{% block content%}
+<div class="row">
+  <div class="col-md-8 offset-md-2 pt-3">
+    <h1>My registrations</h1>
+    <ul class="list-group">
+      {% for registration in registrations %}
+      <li class="list-group-item d-flex justify-content-between">
+        <a href="{% url 'coursereg:module_details' registration.module_registered.code %}">{{ registration.module_registered.module_name }}</a>
+        <a href="{% url 'coursereg:module_unregister' registration.module_registered.id %}">Unregister</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

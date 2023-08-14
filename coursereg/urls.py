@@ -16,4 +16,5 @@ urlpatterns = [
     path("courses/<int:pk>/unenrol", views.course_unenrol, name="course_unenrol"), 
     path("modules/<int:pk>/register/", views.module_register, name="module_register"), 
     path("modules/<int:pk>/unregister/", views.module_unregister, name="module_unregister"), 
+    path("registrations/", views.registrations, name="registrations"),
 ]
