@@ -132,7 +132,7 @@ def course_enrol(request, pk):
         else:
             user.groups.add(course)
             messages.success(
-                request, 'You have successfully enrolled in this module')
+                request, 'You have successfully enrolled in this course')
             return redirect('coursereg:course_detail', pk=pk)
     else:
         messages.warning(request, "You must be logged in to enrol in a course")

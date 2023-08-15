@@ -40,7 +40,10 @@ def register(request):
 def profile(request, pk):
     if request.user.is_authenticated:
         student = Student.objects.get(id=pk)
-        return render(request, 'accounts/profile.html', {'student': student})
+        course = ""
+        if len(student.user.groups.filter()) > 0:
+            course = student.user.groups.filter()[0]
+        return render(request, 'accounts/profile.html', {'student': student, 'course': course})
     else:
         messages.warning(request, "You must be logged in to view this page")
         return redirect('coursereg:home')
