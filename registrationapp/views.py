@@ -35,3 +35,5 @@ class ModuleListCreateView(generics.ListCreateAPIView):
 class RegistrationListCreateView(generics.ListCreateAPIView):
     queryset = Registration.objects.all()
     serializer_class = RegistrationSerializer
+
+

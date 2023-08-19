@@ -19,18 +19,23 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
-from django.urls import path
-from .views import StudentListCreateView, ModuleListCreateView, RegistrationListCreateView,ApiRoot,CourseListCreateView
+from . import views
+from django.contrib.auth import views as auth_views
+from accounts.views import reset_password
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("coursereg.urls")),
-    path("accounts/", include("accounts.urls")),
-    path('api/', ApiRoot.as_view(), name='api-root'),
-    path('api/students/', StudentListCreateView.as_view(), name='student-list-create'),
-    path('api/modules/', ModuleListCreateView.as_view(), name='module-list-create'),
-    path('api/registrations/', RegistrationListCreateView.as_view(), name='registration-list-create'),
-    path('api/courses/', CourseListCreateView.as_view(), name='course-list-create'),
+    path("accounts/", include("accounts.urls")),    
+    path('reset_password/', reset_password, name='reset_password'),
+    path('reset_password_done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('api/', views.ApiRoot.as_view(), name='api-root'),
+    path('api/students/', views.StudentListCreateView.as_view(), name='student-list-create'),
+    path('api/modules/', views.ModuleListCreateView.as_view(), name='module-list-create'),
+    path('api/registrations/', views.RegistrationListCreateView.as_view(), name='registration-list-create'),
+    path('api/courses/', views.CourseListCreateView.as_view(), name='course-list-create'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

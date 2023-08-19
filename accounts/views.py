@@ -4,6 +4,7 @@ from .forms import UserUpdateForm, UserRegisterForm, ProfileUpdateForm
 from django.contrib import messages
 from .models import Student
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordResetForm
 
 
 def profile(request):
@@ -77,3 +78,17 @@ def update_profile(request, pk):
     else:
         messages.warning(request, "You must be logged in to view this page")
         return redirect('coursereg:home')
+
+def reset_password(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            form.save(
+                request=request,
+                email_template_name='accounts/password_reset_email.html'
+            )
+            messages.success(request, 'Password reset email has been sent.')
+            return redirect('password_reset_done')
+    else:
+        form = PasswordResetForm()
+    return render(request, 'accounts/reset_password.html', {'form': form})
