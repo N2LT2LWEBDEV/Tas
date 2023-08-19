@@ -1,33 +1,63 @@
 {% extends 'coursereg/base.html'%}{% block content%} {%load static %}
-<div class="row pt-3">
-  <div class="col-md-8 offset-md-2">
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-    {% endif %}
-    <h1>Profile page</h1>
-    <div class="row">
-      <div class="col-md-3">
-        <img src="/media/{{student.profile_pic}}" alt="profile photo" width="200" height="200">
-        <p><a href="{% url 'accounts:update_profile' student.id %}">Update profile</a></p>
-        <p><a href="{% url 'coursereg:registrations' %}">My registrations</a></p>
+  <div class="row pt-3">
+    <div class="col-md-8 offset-md-2">
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
+      {% endfor %}
+      {% endif %}
+      <h1>Profile page</h1>
+      <div class="row">
+        <div class="col-md-3">
+          <img src="/media/{{student.profile_pic}}" alt="profile photo" width="200" height="200">
+          <p><a href="{% url 'accounts:update_profile' student.id %}">Update profile</a></p>
+          <p><a href="{% url 'coursereg:registrations' %}">My registrations</a></p>
+        </div>
 
-      <div class="col-md-6 offset-md-1">
-        {% if student is not None %}
-        <p>Name: {{ student.user.first_name }} {{ student.user.last_name }}</p>
-        <p>Address: {{ student.address }}</p>
-        <p>City: {{ student.city }}</p>
-        <p>Country: {{ student.country }}</p>
-        <p>Date of birth: {{ student.date_of_birth }}</p>
-        <p>Course: {{ course }}</p>
-        {% endif %}
+        <div class="col-md-6 offset-md-1">
+          {% if student is not None %}
+          <p>Name: {{ student.user.first_name }} {{ student.user.last_name }}</p>
+          <p>Address: {{ student.address }}</p>
+          <p>City: {{ student.city }}</p>
+          <p>Country: {{ student.country }}</p>
+          <p>Date of birth: {{ student.date_of_birth }}</p>
+          <p>Course: {{ course }}</p>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
-</div>
+  <div class="row justify-content-center">
+      <div class="col-md-8">
+          <div class="card">
+              <div class="card-header">
+                  Random Fact of the Day
+              </div>
+              <div class="card-body">
+                  <blockquote class="blockquote mb-0">
+                      <p id="randomFact">Loading...</p>
+                      <footer class="blockquote-footer" id="factSource">Source: Random Facts API</footer>
+                  </blockquote>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+      fetch('https://uselessfacts.jsph.pl/api/v2/facts/random')
+          .then(response => response.json())
+          .then(data => {
+              document.getElementById('randomFact').textContent = data.text;
+          })
+          .catch(error => {
+              console.error('Error fetching random fact:', error);
+              document.getElementById('randomFact').textContent = 'Failed to load random fact.';
+          });
+  });
+  </script>
+
 {%endblock%}

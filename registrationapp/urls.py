@@ -19,11 +19,18 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
+from django.urls import path
+from .views import StudentListCreateView, ModuleListCreateView, RegistrationListCreateView,ApiRoot,CourseListCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("coursereg.urls")),
     path("accounts/", include("accounts.urls")),
+    path('api/', ApiRoot.as_view(), name='api-root'),
+    path('api/students/', StudentListCreateView.as_view(), name='student-list-create'),
+    path('api/modules/', ModuleListCreateView.as_view(), name='module-list-create'),
+    path('api/registrations/', RegistrationListCreateView.as_view(), name='registration-list-create'),
+    path('api/courses/', CourseListCreateView.as_view(), name='course-list-create'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
