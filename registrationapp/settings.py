@@ -21,13 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-v%6wdj7w9m#f45_e4mgvy&e-$jdx)ecq+hbfmxtdb-e(&9(pcr"
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-v%6wdj7w9m#f45_e4mgvy&e-$jdx)ecq+hbfmxtdb-e(&9(pcr')
+
+WEBSITE_HOSTNAME = os.environ.get('WEBSITE_HOSTNAME', None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = WEBSITE_HOSTNAME == None
 
-ALLOWED_HOSTS = []
-
+if DEBUG:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = [WEBSITE_HOSTNAME,f'https://{WEBSITE_HOSTNAME}']
+    CSRF_TRUSTED_ORIGINS = [f'https://{WEBSITE_HOSTNAME}']
 
 # Application definition
 
@@ -42,6 +47,7 @@ INSTALLED_APPS = [
     "coursereg.apps.CourseregConfig",
     "crispy_forms",
     "crispy_bootstrap4",
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -78,12 +84,25 @@ WSGI_APPLICATION = "registrationapp.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.environ.get("AZURE_DB_NAME"),
+            "HOST": os.environ.get("AZURE_DB_HOST"),
+            "PORT": os.environ.get("AZURE_DB_PORT"),
+            "USER": os.environ.get("AZURE_DB_USER"),
+            "PASSWORD": os.environ.get("AZURE_DB_PASSWORD"),
+        }
+    }
+ 
 
 
 # Password validation
@@ -119,10 +138,21 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-STATIC_URL = "static/"
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
+if DEBUG:
+    STATIC_URL = "static/"
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
+else:
+    MEDIA_URL = (
+        f"https://{os.environ.get('AZURE_SA_NAME')}.blob.core.windows.net/media/"
+    )
+    STATIC_URL = (
+        f"https://{os.environ.get('AZURE_SA_NAME')}.blob.core.windows.net/static/"
+    )
+    DEFAULT_FILE_STORAGE = "registrationapp.storages.AzureMediaStorage"
+    STATICFILES_STORAGE = "registrationapp.storages.AzureStaticStorage"
+    AZURE_SA_NAME = os.environ.get("AZURE_SA_NAME")
+    AZURE_SA_KEY = os.environ.get("AZURE_SA_KEY")
 
 # Redirect to the student dashboard after login
 LOGIN_REDIRECT_URL = "coursereg:home"

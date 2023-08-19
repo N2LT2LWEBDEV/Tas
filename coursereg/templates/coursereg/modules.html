@@ -19,7 +19,7 @@
         <tbody>
             {% for module in modules %}
             <tr>
-                <td scope="row">{{ module.module_name }}</td>
+                <td scope="row"> <a href="{% url 'coursereg:module_details' module.code%}"> {{ module.module_name }}</a></td>
                 <td scope="row">{{ module.code }}</td>
                 <td scope="row">{{ module.credit }}</td>
                 <td scope="row">{{ module.module_desc }}</td>

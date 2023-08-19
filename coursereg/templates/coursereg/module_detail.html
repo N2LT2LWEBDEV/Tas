@@ -69,7 +69,7 @@
         {% for student in registrations %}
         <li class="list-group-item">
             <div class="d-flex">
-                <img src="/media/{{student.profile_pic}}" class="profile-photo" alt="profile photo">
+                <img src="/media/{{student.profile_pic}}" class="profile-photo img-rounded img-fluid" alt="profile photo">
                 <p>{{ student.user.first_name }} {{ student.user.last_name }}</p>
             </div>
         </li>
