@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import UserUpdateForm, UserRegisterForm, ProfileUpdateForm
 from django.contrib import messages
 from .models import Student
+from django.contrib.auth.decorators import login_required
 
 
 def profile(request):
@@ -36,7 +37,8 @@ def register(request):
         form = UserRegisterForm()
         student_form = ProfileUpdateForm()
         return render(request, 'accounts/register.html', {'form': form, 'student_form': student_form})
-    
+
+@login_required
 def profile(request, pk):
     if request.user.is_authenticated:
         student = Student.objects.get(id=pk)
@@ -47,7 +49,8 @@ def profile(request, pk):
     else:
         messages.warning(request, "You must be logged in to view this page")
         return redirect('coursereg:home')
-    
+
+@login_required
 def update_profile(request, pk):
     if request.user.is_authenticated:
         student = Student.objects.get(id = pk)
