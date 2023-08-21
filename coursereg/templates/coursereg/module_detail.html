@@ -11,40 +11,21 @@
     <h1>Module Details</h1>
 
     {% if module %}
-    <table class="table table-striped table-hover table-bordered">
-        <tbody>
-            <tr>
-                <td>Module Name</td>
-                <td>{{ module.module_name }}</td>
-            </tr>
-            <tr>
-                <td>Module Code</td>
-                <td>{{ module.code }}</td>
-            </tr>
-            <tr>
-                <td>Credit</td>
-                <td>{{ module.credit }}</td>
-            </tr>
-            <tr>
-                <td>Module Description</td>
-                <td>{{ module.module_desc }}</td>
-            </tr>
-            <tr>
-                <td>Category</td>
-                <td>{{ module.category }}</td>
-            </tr>
-            <tr>
-                <td>Status</td>
-                <td>
-                    {% if module.availability %}
-                    Open
-                    {% else %}
-                    Closed
-                    {% endif %}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <h1>{{ module.module_name }} ({{ module.code }})</h1>
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <p class="mr-2">{{ module.credit }} Credit, {{ module.category }} </p>
+                <p> Availability: {% if module.availability %}
+                    <i class="fas fa-lock-open text-success"></i>
+                    Open {% else %}
+                    <i class="fas fa-lock text-danger"></i>
+                    Closed {% endif %} 
+                </p>
+            </div>
+            <h3 class="article-title">Description</h3>
+            <p class="article-content">{{ module.module_desc }}</p>
+            <hr/>
 
     <div class="row">
         <div class="col-md-6">
@@ -54,12 +35,12 @@
             {% if not is_student_registered  %}
                 {% if module.availability  %}
                     <div class="col-md-6 text-end">
-                        <a href="{% url 'coursereg:module_register' module.id %}">Register</a>
+                        <a href="{% url 'coursereg:module_register' module.id %}" class="btn btn-info">Register</a>
                     </div>
                 {% endif %}
             {% else %}
                 <div class="col-md-6 text-end">
-                    <a href="{% url 'coursereg:module_unregister' module.id %}">Unregister</a>
+                    <a href="{% url 'coursereg:module_unregister' module.id %}" class="btn btn-danger">Unregister</a>
                 </div>
             {% endif %}
         {% endif %}
@@ -69,8 +50,8 @@
         {% for student in registrations %}
         <li class="list-group-item">
             <div class="d-flex">
-                <img src="/media/{{student.profile_pic}}" class="profile-photo img-rounded img-fluid" alt="profile photo">
-                <p>{{ student.user.first_name }} {{ student.user.last_name }}</p>
+                <img src="/media/{{student.profile_pic}}" class="profile-photo rounded-circle" alt="profile photo">
+                <span class="article-content">{{ student.user.first_name }} {{ student.user.last_name }}</span>
             </div>
         </li>
         {% endfor %}

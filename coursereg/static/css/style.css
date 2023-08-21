@@ -434,6 +434,7 @@
 }
 
 .profile-photo {
-    width: 80px;
-    height: 80px;
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
 }
